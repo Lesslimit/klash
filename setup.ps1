@@ -7,13 +7,13 @@ Write-Host 'Installing Chocolatey package manager. Mazafaka!'  -ForegroundColor 
 iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 
 Write-Host 'Downloading .NET Core SDK for Windows. Mazafaka!'  -ForegroundColor DarkGreen
-iwr https://go.microsoft.com/fwlink/?LinkID=827524 -OutFile $dotnetcoresdkPath
+iwr https://go.microsoft.com/fwlink/?LinkID=831453 -OutFile $dotnetcoresdkPath
 
 Write-Host 'Installing .NET Core SDK for Windows. Mazafaka!'  -ForegroundColor DarkGreen
 Start-Process $dotnetcoresdkPath -ArgumentList '/s', '/v', '/qn' -Wait
 
-dotnet restore
-dotnet build
+choco install git -y
+choco install yarn -y
 
 Write-Host 'Fucking Klash is ready to run. Mazafaka!' -ForegroundColor DarkGreen
 Write-Host ''

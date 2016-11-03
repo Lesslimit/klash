@@ -1,0 +1,12 @@
+{
+  "name": "klash",
+  "version": "0.0.1",
+  "description": "Almighty bot",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/Lesslimit/klash",
+    "type": "git"
+  },
+  "author": "Lesslimit <paruboleg@gmail.com>, Shar!k <ygrenne@gmail.com>, PanRoman a.k.a Log14 <roman.viytovych@gmail.com>",
+  "license": "MIT"
+}
