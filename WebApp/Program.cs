@@ -25,6 +25,7 @@ namespace Klash.WebApp
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(rootDir)
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
 

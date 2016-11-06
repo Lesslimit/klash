@@ -1,23 +1,20 @@
 {
     "version": "0.2.0",
-    "configurations": [
-        {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}\\bin\\Debug\\netcoreapp1.0\\klash.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "externalConsole": false,
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command.pickProcess}"
-        }
-    ]
+    "configurations": [{
+        "name": "WebApp",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceRoot}\\WebApp\\bin\\Debug\\netcoreapp1.0\\WebApp.dll",
+        "args": [],
+        "cwd": "${workspaceRoot}\\WebApp",
+        "externalConsole": false,
+        "stopAtEntry": false,
+        "internalConsoleOptions": "openOnSessionStart"
+    }, {
+        "name": ".NET Core Attach",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command.pickProcess}"
+    }]
 }
