@@ -17,7 +17,7 @@ namespace Klash.WebApp
             var config = new ConfigurationBuilder()
                 .SetBasePath(rootDir)
                  .AddCommandLine(args)
-                 //  .AddJsonFile("appsettings.json")
+                 .AddJsonFile("appsettings.json")
                  .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                  .Build();
 
