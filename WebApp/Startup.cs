@@ -26,13 +26,12 @@ namespace Klash.WebApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMvc();
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello Mazafaka!");
             });
-
-            app.UseMvc();
-
         }
     }
 }
