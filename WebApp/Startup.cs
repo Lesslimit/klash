@@ -14,6 +14,7 @@ namespace Klash.WebApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -29,6 +30,9 @@ namespace Klash.WebApp
             {
                 await context.Response.WriteAsync("Hello Mazafaka!");
             });
+
+            app.UseMvc();
+
         }
     }
 }
