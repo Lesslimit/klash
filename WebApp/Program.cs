@@ -10,11 +10,13 @@ namespace Klash.WebApp
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; private set; }
+
         public static void Main(string[] args)
         {
             var rootDir = Directory.GetCurrentDirectory();
 
-            var config = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                 .SetBasePath(rootDir)
                  .AddCommandLine(args)
                  .AddJsonFile("appsettings.json")
@@ -22,7 +24,7 @@ namespace Klash.WebApp
                  .Build();
 
             var host = new WebHostBuilder()
-                .UseConfiguration(config)
+                .UseConfiguration(Configuration)
                 .UseKestrel()
                 .UseContentRoot(rootDir)
                 .UseIISIntegration()
