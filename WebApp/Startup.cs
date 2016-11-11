@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AspNet.Security.OAuth.Slack;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,9 +35,9 @@ namespace Klash.WebApp
             });
 
             services.AddOptions();
-            services.AddAuthentication(opts =>
+            services.AddAuthentication(options =>
             {
-                opts.SignInScheme = "Cookies";
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
             services.Configure<SlackOptions>(Program.Configuration.GetSection("Slack"));
@@ -53,8 +55,6 @@ namespace Klash.WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
-
             app.UseSimpleInjectorAspNetRequestScoping(container);
             InitializeContainer(app);
             container.Verify();
@@ -63,58 +63,21 @@ namespace Klash.WebApp
             app.UseWebSockets();
             app.UseSignalR();
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                LoginPath = new PathString("/login"),
-                LogoutPath = new PathString("/logout")
+                LoginPath = new PathString("/signin"),
+                LogoutPath = new PathString("/signout")
             });
 
-            app.UseOAuthAuthentication(new OAuthOptions
+            app.UseSlackAuthentication(new SlackAuthenticationOptions
             {
-                AuthenticationScheme = "Slack",
                 ClientId = slackOptions.Value.ClientId,
-                ClientSecret = slackOptions.Value.ClientSecret,
-                CallbackPath = new PathString("/slack-auth"),
-                AuthorizationEndpoint = "https://slack.com/oauth/authorize",
-                TokenEndpoint = "https://slack.com/api/oauth.access",
-                UserInformationEndpoint = "https://slack.com/api/users.identity?token=",
-                Scope = { "identity.basic" },
-                Events = new OAuthEvents
-                {
-                    OnCreatingTicket = async context =>
-                    {
-                        var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint + context.AccessToken);
-                        var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-
-                        response.EnsureSuccessStatusCode();
-
-                        var userObject = JObject.Parse(await response.Content.ReadAsStringAsync());
-                        var user = userObject.SelectToken("user");
-                        var userId = user.Value<string>("id");
-
-                        if (!string.IsNullOrEmpty(userId))
-                        {
-                            context.Identity.AddClaim(
-                                new Claim(ClaimTypes.NameIdentifier, userId, ClaimValueTypes.String, context.Options.ClaimsIssuer)
-                                );
-                        }
-
-                        var fullName = user.Value<string>("name");
-
-                        if (!string.IsNullOrEmpty(fullName))
-                        {
-                            context.Identity.AddClaim(new Claim(ClaimTypes.Name, fullName, ClaimValueTypes.String, context.Options.ClaimsIssuer));
-                        }
-                    }
-                }
+                ClientSecret = slackOptions.Value.ClientSecret
             });
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello Mazafaka!");
-            });
+            app.UseMvc();
         }
 
         private void InitializeContainer(IApplicationBuilder app)
